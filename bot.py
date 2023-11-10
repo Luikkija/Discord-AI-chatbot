@@ -1,5 +1,6 @@
 """
 Chatgpt discord bot
+Programmed by: Samu Niemelä
 """
 
 from openai import OpenAI
@@ -27,12 +28,12 @@ async def on_ready():
 
     channel = bot.get_channel(channel_id)
     if channel:
-        await channel.send("Bot is ready.")
+        await channel.send("Bot is now ready.")
 
 @bot.command(name = 'bot')
 async def ask_openai(ctx, *, question):
 
-    # Call the OpenAI GPT-3 API with the user's question using chat-based completion
+    # Calls the OpenAI GPT-3 API with the user's question using chat-based completion
     response = client.chat.completions.create(
     messages=[
         {
@@ -42,12 +43,12 @@ async def ask_openai(ctx, *, question):
     ],
 
     model= "gpt-3.5-turbo",
-    max_tokens= 150
+    max_tokens= 150 # This is the max character amount the bot can answer in.
 )
-    # Get the generated response from OpenAI
+    # Gets the generated response from OpenAI
     answer = response.choices[0].message.content
 
-    # Send the answer back to the user
+    # Sends the answer back to the user
     await ctx.send(f'{answer}')
 
 bot.run(discord_token)
