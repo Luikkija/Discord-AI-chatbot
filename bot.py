@@ -19,10 +19,10 @@ client = OpenAI(
     api_key = openai_key,
 )
 
-bot = commands.Bot(command_prefix = "!", intents = discord.Intents.all())
+Bot = commands.Bot(command_prefix = "!", intents = discord.Intents.all())
 messages = []
 
-@bot.event
+@Bot.event
 async def on_ready():
     print("Bot online.")
 
