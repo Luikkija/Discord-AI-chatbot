@@ -19,10 +19,10 @@ client = OpenAI(
     api_key = openai_key,
 )
 
-Bot = commands.Bot(command_prefix = "!", intents = discord.Intents.all())
+bot = commands.Bot(command_prefix = "!", intents = discord.Intents.all())
 messages = []
 
-@Bot.event
+@bot.event
 async def on_ready():
     print("Bot online.")
 
@@ -30,7 +30,7 @@ async def on_ready():
     if channel:
         await channel.send("Bot is now ready.")
 
-@Bot.command(name = 'bot')
+@bot.command(name = 'bot')
 async def ask_openai(ctx, *, question):
 
     if question == "help":
@@ -76,4 +76,4 @@ async def info_error(ctx, error):
     if isinstance(error, OpenAI.error.RateLimitError):
         await ctx.reply("You are out of credits.")
 
-Bot.run(discord_token)
+bot.run(discord_token)
