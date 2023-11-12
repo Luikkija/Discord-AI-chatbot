@@ -30,10 +30,25 @@ async def on_ready():
     if channel:
         await channel.send("Bot is now ready.")
 
-@bot.command(name = 'bot')
+@Bot.command(name = 'bot')
 async def ask_openai(ctx, *, question):
 
-    # Calls the OpenAI GPT-3 API with the user's question using chat-based completion
+    if question == "help":
+        
+        embed = discord.Embed(
+            title = "**Bot information:**",
+            color = 0xff0000
+            )
+        
+        embed.set_thumbnail(url = "https://i.imgur.com/DNsXXq9.jpeg")
+        embed.add_field(name= "Bot commands:", value= "ChatGPT answer: **!bot**\n    Help: **!bot help**", inline= False)
+        embed.add_field(name= "Automatic actions:", value= "Adds role 'Paska Alaluokka' automatically for a new member.", inline= False)
+        embed.set_footer(text = "Information requested by: {}".format(ctx.author.display_name))
+        
+        await ctx.send(embed=embed)
+        return
+    
+    # Call the OpenAI GPT-3 API with the user's question using chat-based completion
     response = client.chat.completions.create(
     messages=[
         {
@@ -43,12 +58,22 @@ async def ask_openai(ctx, *, question):
     ],
 
     model= "gpt-3.5-turbo",
-    max_tokens= 150 # This is the max character amount the bot can answer in.
+    max_tokens= 150
 )
-    # Gets the generated response from OpenAI
+    # Get the generated response from OpenAI
     answer = response.choices[0].message.content
 
-    # Sends the answer back to the user
-    await ctx.send(f'{answer}')
+    # Send the answer back to the user
+    await ctx.reply(f'{answer}')
 
-bot.run(discord_token)
+
+@ask_openai.error
+async def info_error(ctx, error):
+
+    if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+        await ctx.reply("Please write a prompt for the bot.")
+    
+    if isinstance(error, OpenAI.error.RateLimitError):
+        await ctx.reply("You are out of credits.")
+
+Bot.run(discord_token)
