@@ -1,6 +1,5 @@
 """
 Chatgpt discord bot
-Programmed by: Samu Niemelä
 """
 
 from openai import OpenAI
